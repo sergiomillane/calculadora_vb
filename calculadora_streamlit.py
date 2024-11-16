@@ -1,6 +1,32 @@
 import streamlit as st
 
-st.title("Calculadora de Financiamiento")
+# Configuración del tema oscuro
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #1E3A5F; /* Azul marino oscuro */
+        color: white; /* Texto blanco */
+    }
+    .stApp {
+        background-color: #1E3A5F; /* Fondo azul marino */
+    }
+    .result-box {
+        border: 1px solid #4CAF50; /* Verde claro */
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #2A5470; /* Azul intermedio */
+        color: white; /* Texto blanco */
+        font-weight: bold;
+        font-size: 18px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.title("Calculadora de Financiamiento 💵")
 
 # Entradas del usuario
 precio_oferta = st.number_input("Precio de oferta ($)", min_value=0.0, format="%.2f")
@@ -49,13 +75,8 @@ else:
     pago_mensual = total_a_pagar / plazo_meses
     pago_semanal = total_a_pagar / (plazo_meses * 4)
 
-    # Mostrar los resultados
-    st.write(f"**Tasa de interés aplicada:** {interes}%")
-    st.write(f"**Plazo:** {plazo_meses} meses ({plazo_meses * 4} semanas)")
-    st.write(f"**Monto base financiado:** ${monto_base_financiado:.2f}")
-    st.write(f"**Interés calculado:** ${interes_calculado:.2f}")
-    st.write(f"**Cantidad financiada total:** ${cantidad_financiada:.2f}")
-    st.write(f"**Descuento por promoción:** ${descuento_por_promocion:.2f}")
-    st.write(f"**Total a pagar:** ${total_a_pagar:.2f}")
-    st.write(f"**Pago mensual:** ${pago_mensual:.2f}")
-    st.write(f"**Pago semanal:** ${pago_semanal:.2f}")
+    # Mostrar los resultados en recuadros
+    st.markdown(f"""
+    <div class="result-box">Tasa de interés aplicada: <span style="color:#4CAF50;">{interes}%</span></div>
+    <div class="result-box">Plazo: <span style="color:#4CAF50;">{plazo_meses} meses ({plazo_meses * 4} semanas)</span></div>
+    <div c
