@@ -76,7 +76,17 @@ else:
     pago_semanal = total_a_pagar / (plazo_meses * 4)
 
     # Mostrar los resultados en recuadros
-    st.markdown(f"""
-    <div class="result-box">Tasa de interés aplicada: <span style="color:#4CAF50;">{interes}%</span></div>
-    <div class="result-box">Plazo: <span style="color:#4CAF50;">{plazo_meses} meses ({plazo_meses * 4} semanas)</span></div>
-    <div c
+    st.markdown(
+        f"""
+        <div class="result-box">Tasa de interés aplicada: <span style="color:#4CAF50;">{interes}%</span></div>
+        <div class="result-box">Plazo: <span style="color:#4CAF50;">{plazo_meses} meses ({plazo_meses * 4} semanas)</span></div>
+        <div class="result-box">Monto base financiado: <span style="color:#4CAF50;">${monto_base_financiado:.2f}</span></div>
+        <div class="result-box">Interés calculado: <span style="color:#4CAF50;">${interes_calculado:.2f}</span></div>
+        <div class="result-box">Cantidad financiada total: <span style="color:#4CAF50;">${cantidad_financiada:.2f}</span></div>
+        <div class="result-box">Descuento por promoción: <span style="color:#4CAF50;">-${descuento_por_promocion:.2f}</span></div>
+        <div class="result-box">Total a pagar: <span style="color:#4CAF50;">${total_a_pagar:.2f}</span></div>
+        <div class="result-box">Pago mensual: <span style="color:#4CAF50;">${pago_mensual:.2f}</span></div>
+        <div class="result-box">Pago semanal: <span style="color:#4CAF50;">${pago_semanal:.2f}</span></div>
+        """,
+        unsafe_allow_html=True,
+    )
