@@ -1,34 +1,37 @@
 import streamlit as st
 
-# Configuración del tema oscuro con estilos adicionales
+# Configuración del tema claro con estilos adicionales
 st.markdown(
     """
     <style>
     body {
-        background-color: #1E3A5F; /* Azul marino oscuro */
-        color: white; /* Texto blanco */
+        background-color: #FFF8DC; /* Amarillo claro */
+        color: #333333; /* Texto oscuro */
     }
     .stApp {
-        background-color: #1E3A5F; /* Fondo azul marino */
+        background-color: #FFF8DC; /* Fondo amarillo claro */
     }
     label {
-        color: white !important; /* Forzar texto blanco para las etiquetas */
+        color: #333333 !important; /* Texto oscuro para los nombres de los inputs */
         font-weight: bold; /* Negrita para resaltar */
         font-size: 16px; /* Tamaño de letra más grande */
     }
     .result-box {
-        border: 1px solid #4CAF50; /* Verde claro */
+        border: 1px solid #333333; /* Borde oscuro */
         border-radius: 5px;
         padding: 10px;
         margin: 10px 0;
-        background-color: #2A5470; /* Azul intermedio */
-        color: white; /* Texto blanco */
+        background-color: #FFFACD; /* Amarillo más claro */
+        color: #333333; /* Texto oscuro */
         font-weight: bold;
         font-size: 18px;
     }
     input {
-        color: black !important; /* Forzar texto negro dentro de los campos */
-        background-color: #E8E8E8 !important; /* Fondo gris claro */
+        color: #333333 !important; /* Texto oscuro dentro de los campos */
+        background-color: #FFFFFF !important; /* Fondo blanco */
+        border: 1px solid #CCCCCC; /* Borde gris claro */
+        border-radius: 5px;
+        padding: 5px;
     }
     </style>
     """,
@@ -87,15 +90,15 @@ else:
     # Mostrar los resultados en recuadros
     st.markdown(
         f"""
-        <div class="result-box">Tasa de interés aplicada: <span style="color:#4CAF50;">{interes}%</span></div>
-        <div class="result-box">Plazo: <span style="color:#4CAF50;">{plazo_meses} meses ({plazo_meses * 4} semanas)</span></div>
-        <div class="result-box">Monto base financiado: <span style="color:#4CAF50;">${monto_base_financiado:.2f}</span></div>
-        <div class="result-box">Interés calculado: <span style="color:#4CAF50;">${interes_calculado:.2f}</span></div>
-        <div class="result-box">Cantidad financiada total: <span style="color:#4CAF50;">${cantidad_financiada:.2f}</span></div>
-        <div class="result-box">Descuento por promoción: <span style="color:#4CAF50;">-${descuento_por_promocion:.2f}</span></div>
-        <div class="result-box">Total a pagar: <span style="color:#4CAF50;">${total_a_pagar:.2f}</span></div>
-        <div class="result-box">Pago mensual: <span style="color:#4CAF50;">${pago_mensual:.2f}</span></div>
-        <div class="result-box">Pago semanal: <span style="color:#4CAF50;">${pago_semanal:.2f}</span></div>
+        <div class="result-box">Tasa de interés aplicada: <span style="color:#333333;">{interes}%</span></div>
+        <div class="result-box">Plazo: <span style="color:#333333;">{plazo_meses} meses ({plazo_meses * 4} semanas)</span></div>
+        <div class="result-box">Monto base financiado: <span style="color:#333333;">${monto_base_financiado:.2f}</span></div>
+        <div class="result-box">Interés calculado: <span style="color:#333333;">${interes_calculado:.2f}</span></div>
+        <div class="result-box">Cantidad financiada total: <span style="color:#333333;">${cantidad_financiada:.2f}</span></div>
+        <div class="result-box">Descuento por promoción: <span style="color:#333333;">-${descuento_por_promocion:.2f}</span></div>
+        <div class="result-box">Total a pagar: <span style="color:#333333;">${total_a_pagar:.2f}</span></div>
+        <div class="result-box">Pago mensual: <span style="color:#333333;">${pago_mensual:.2f}</span></div>
+        <div class="result-box">Pago semanal: <span style="color:#333333;">${pago_semanal:.2f}</span></div>
         """,
         unsafe_allow_html=True,
     )
