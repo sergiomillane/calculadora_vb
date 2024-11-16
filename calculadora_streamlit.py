@@ -40,11 +40,20 @@ st.markdown(
 
 st.title("Calculadora de Financiamiento 💵")
 
-# Entradas del usuario
-precio_oferta = st.number_input("Precio de oferta ($)", min_value=0.0, format="%.2f")
-enganche = st.number_input("Enganche ($)", min_value=0.0, format="%.2f")
-promocion_extra = st.number_input("Promoción extra (%)", min_value=0.0, max_value=100.0, format="%.2f")
-mes_liquidacion = st.number_input("Mes de liquidación (0 para pagar todo el plazo)", min_value=0, step=1)
+# Colocar los inputs en una fila
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    precio_oferta = st.number_input("Precio de oferta ($)", min_value=0.0, format="%.2f")
+
+with col2:
+    enganche = st.number_input("Enganche ($)", min_value=0.0, format="%.2f")
+
+with col3:
+    promocion_extra = st.number_input("Promoción extra (%)", min_value=0.0, max_value=100.0, format="%.2f")
+
+with col4:
+    mes_liquidacion = st.number_input("Mes de liquidación (0 para pagar todo el plazo)", min_value=0, step=1)
 
 # Tablas de acumulado por plazo
 tablas_acumulado = {
@@ -108,8 +117,13 @@ else:
         # Obtener el porcentaje acumulado para el mes de liquidación
         porcentaje_acumulado = tablas_acumulado[plazo_meses][mes_liquidacion - 1] / 100
 
+        # Calcular el monto pagado hasta el mes anterior
+        monto_pagado = pago_mensual * (mes_liquidacion - 1)
+
         # Calcular el monto para liquidar considerando el interés acumulado hasta ese mes
-        liquida_con = monto_base_financiado + (interes_calculado * porcentaje_acumulado)
+        liquida_con = (
+            monto_base_financiado + (interes_calculado * porcentaje_acumulado) - monto_pagado
+        )
 
     # Mostrar los resultados
     st.markdown(
