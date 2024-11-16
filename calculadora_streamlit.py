@@ -44,7 +44,7 @@ st.title("Calculadora de Financiamiento 💵")
 precio_oferta = st.number_input("Precio de oferta ($)", min_value=0.0, format="%.2f")
 enganche = st.number_input("Enganche ($)", min_value=0.0, format="%.2f")
 promocion_extra = st.number_input("Promoción extra (%)", min_value=0.0, max_value=100.0, format="%.2f")
-mes_liquidacion = st.number_input("Mes de liquidación", min_value=1, step=1)
+mes_liquidacion = st.number_input("Mes de liquidación (0 para pagar todo el plazo)", min_value=0, step=1)
 
 # Tablas de acumulado por plazo
 tablas_acumulado = {
@@ -94,19 +94,36 @@ else:
     # Calcular el total a pagar
     total_a_pagar = cantidad_financiada - descuento_por_promocion
 
-    # Validar que el mes de liquidación no exceda el plazo
-    if mes_liquidacion > plazo_meses:
+    # Calcular pagos
+    pago_mensual = total_a_pagar / plazo_meses
+    pago_semanal = total_a_pagar / (plazo_meses * 4)
+
+    # Determinar el monto para liquidar
+    if mes_liquidacion == 0 or mes_liquidacion == "":
+        # Si el mes de liquidación es 0, el cliente pagará todo el plazo
+        liquida_con = total_a_pagar
+    elif mes_liquidacion > plazo_meses:
         st.error("El mes de liquidación no puede ser mayor al plazo total.")
     else:
-        # Obtener el porcentaje acumulado
+        # Obtener el porcentaje acumulado para el mes de liquidación
         porcentaje_acumulado = tablas_acumulado[plazo_meses][mes_liquidacion - 1] / 100
 
-        # Calcular el monto para liquidar
+        # Calcular el monto para liquidar considerando el interés acumulado hasta ese mes
         liquida_con = monto_base_financiado + (interes_calculado * porcentaje_acumulado)
 
-        st.markdown(
-            f"""
-            <div class="result-box">Monto restante para liquidar en el mes {mes_liquidacion}: <span style="color:#333333;">${liquida_con:.2f}</span></div>
-            """,
-            unsafe_allow_html=True,
-        )
+    # Mostrar los resultados
+    st.markdown(
+        f"""
+        <div class="result-box">Tasa de interés aplicada: <span style="color:#333333;">{interes}%</span></div>
+        <div class="result-box">Plazo: <span style="color:#333333;">{plazo_meses} meses ({plazo_meses * 4} semanas)</span></div>
+        <div class="result-box">Monto base financiado: <span style="color:#333333;">${monto_base_financiado:.2f}</span></div>
+        <div class="result-box">Interés calculado: <span style="color:#333333;">${interes_calculado:.2f}</span></div>
+        <div class="result-box">Cantidad financiada total: <span style="color:#333333;">${cantidad_financiada:.2f}</span></div>
+        <div class="result-box">Descuento por promoción: <span style="color:#333333;">-${descuento_por_promocion:.2f}</span></div>
+        <div class="result-box">Total a pagar: <span style="color:#333333;">${total_a_pagar:.2f}</span></div>
+        <div class="result-box">Pago mensual: <span style="color:#333333;">${pago_mensual:.2f}</span></div>
+        <div class="result-box">Pago semanal: <span style="color:#333333;">${pago_semanal:.2f}</span></div>
+        <div class="result-box">Monto para liquidar en el mes {mes_liquidacion if mes_liquidacion != 0 else "final"}: <span style="color:#333333;">${liquida_con:.2f}</span></div>
+        """,
+        unsafe_allow_html=True,
+    )
