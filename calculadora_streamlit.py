@@ -12,8 +12,9 @@ st.markdown(
         background-color: #1E3A5F; /* Fondo azul marino */
     }
     label {
-        color: white; /* Color blanco para los nombres de los inputs */
+        color: white !important; /* Forzar texto blanco para las etiquetas */
         font-weight: bold; /* Negrita para resaltar */
+        font-size: 16px; /* Tamaño de letra más grande */
     }
     .result-box {
         border: 1px solid #4CAF50; /* Verde claro */
@@ -24,6 +25,10 @@ st.markdown(
         color: white; /* Texto blanco */
         font-weight: bold;
         font-size: 18px;
+    }
+    input {
+        color: black !important; /* Forzar texto negro dentro de los campos */
+        background-color: #E8E8E8 !important; /* Fondo gris claro */
     }
     </style>
     """,
