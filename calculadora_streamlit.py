@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Configuración del tema oscuro
+# Configuración del tema oscuro con estilos adicionales
 st.markdown(
     """
     <style>
@@ -10,6 +10,10 @@ st.markdown(
     }
     .stApp {
         background-color: #1E3A5F; /* Fondo azul marino */
+    }
+    label {
+        color: white; /* Color blanco para los nombres de los inputs */
+        font-weight: bold; /* Negrita para resaltar */
     }
     .result-box {
         border: 1px solid #4CAF50; /* Verde claro */
