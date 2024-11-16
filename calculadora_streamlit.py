@@ -60,103 +60,58 @@ with col3:
 with col4:
     mes_liquidacion = st.number_input("Mes de liquidación (0 para pagar todo el plazo)", min_value=0, step=1)
 
-# Tablas de acumulado para cada plazo
-tablas_acumulado = {
-    3: [0, 50, 100],
-    6: [0, 51, 70, 85, 95, 100],
-    9: [0, 35, 50, 63, 75, 85, 92, 97, 100],
-    12: [0, 30, 42, 52, 62, 72, 80, 87, 93, 97, 99, 100],
-    18: [0, 11, 21, 30, 39, 48, 55, 62, 68, 74, 79, 84, 88, 92, 97, 99, 100],
-    24: [0, 8, 16, 23, 30, 37, 43, 48, 53, 58, 63, 68, 72, 76, 80, 84, 87, 90, 93, 95, 97, 98, 99, 100],
-}
-
 # Validar enganche
 if enganche > precio_oferta:
     st.error("El enganche no puede ser mayor que el precio de oferta.")
 else:
-    # Calcular monto base financiado
-    monto_base_financiado = precio_oferta - enganche
-
-    # Determinar la tasa de interés según el precio de oferta
-    def determinar_tasa(precio):
+    # Determinar el plazo y el interés según la tabla proporcionada
+    def determinar_plazo_interes(precio):
         if 201 <= precio <= 2500:
-            return 25
+            return 3, 1.25
         elif 2501 <= precio <= 5000:
-            return 60
+            return 6, 1.60
         elif 5001 <= precio <= 8000:
-            return 60
+            return 9, 1.60
         elif 8001 <= precio <= 11000:
-            return 65
+            return 12, 1.65
         elif 11001 <= precio <= 14000:
-            return 75
+            return 18, 1.75
         elif precio > 14000:
-            return 85
+            return 24, 1.85
         else:
-            return 0  # No válido
+            return 0, 0  # No válido
 
-    # Calcular la tasa de interés
-    tasa_interes = determinar_tasa(precio_oferta)
-
-    # Calcular interés total y cantidad financiada total
-    interes_calculado = monto_base_financiado * (tasa_interes / 100)
-    cantidad_financiada_total = monto_base_financiado + interes_calculado
-
-    # Aplicar promoción extra al monto final
-    descuento_promocional = precio_oferta * (promocion_extra / 100)
-    final_a_pagar = cantidad_financiada_total - descuento_promocional
-
-    # Determinar plazo según la cantidad financiada total
-    def determinar_plazo(cantidad_financiada_total):
-        if 201 <= cantidad_financiada_total <= 2500:
-            return 3
-        elif 2501 <= cantidad_financiada_total <= 5000:
-            return 6
-        elif 5001 <= cantidad_financiada_total <= 8000:
-            return 9
-        elif 8001 <= cantidad_financiada_total <= 11000:
-            return 12
-        elif 11001 <= cantidad_financiada_total <= 14000:
-            return 18
-        elif cantidad_financiada_total > 14000:
-            return 24
-        else:
-            return 0  # No válido
-
-    # Validación del plazo antes de usarlo
-    plazo_meses = determinar_plazo(cantidad_financiada_total)
+    # Obtener plazo y porcentaje de interés
+    plazo_meses, tasa_interes_factor = determinar_plazo_interes(precio_oferta)
     plazo_semanas = plazo_meses * 4  # Cada mes equivale a 4 semanas
+    tasa_interes_porcentaje = (tasa_interes_factor - 1) * 100  # Convertir factor a porcentaje
 
     if plazo_meses == 0:
-        st.error("No se encontró un plazo válido para la cantidad financiada total. Verifica los valores ingresados.")
+        st.error("El precio de oferta no se encuentra en un rango válido.")
     else:
+        # Calcular monto base financiado
+        monto_base_financiado = precio_oferta - enganche
+
+        # Calcular interés total
+        interes_calculado = monto_base_financiado * (tasa_interes_factor - 1)
+
+        # Calcular cantidad financiada total
+        cantidad_financiada_total = monto_base_financiado + interes_calculado
+
+        # Aplicar promoción extra al monto final
+        descuento_promocional = precio_oferta * (promocion_extra / 100)
+        final_a_pagar = cantidad_financiada_total - descuento_promocional
+
         # Calcular pagos
         pago_mensual = final_a_pagar / plazo_meses
         pago_semanal = final_a_pagar / plazo_semanas
-
-        # Calcular "Liquide con"
-        if mes_liquidacion == 0 or mes_liquidacion == "":
-            liquida_con = final_a_pagar  # Pagar todo al final del plazo
-        elif mes_liquidacion > plazo_meses:
-            st.error("El mes de liquidación no puede ser mayor al plazo total.")
-        else:
-            # Obtener porcentaje acumulado
-            porcentaje_acumulado = tablas_acumulado[plazo_meses][mes_liquidacion - 1] / 100
-
-            # Calcular interés ajustado para el mes de liquidación
-            interes_ajustado = interes_calculado * porcentaje_acumulado
-
-            # Calcular pagos acumulados hasta el mes anterior
-            pagos_acumulados = pago_mensual * (mes_liquidacion - 1)
-
-            # Calcular "Liquide con" considerando la promoción extra
-            liquida_con = (monto_base_financiado + interes_ajustado) - pagos_acumulados - descuento_promocional
 
         # Mostrar resultados
         st.markdown(
             f"""
             <div class="result-box">
             <h2>Resultados:</h2>
-            <p><strong>Tasa de interés:</strong> {tasa_interes}%</p>
+            <p><strong>Tasa de interés:</strong> {tasa_interes_porcentaje:.2f}%</p>
             <p><strong>Plazo:</strong> {plazo_meses} meses ({plazo_semanas} semanas)</p>
             <p><strong>Enganche:</strong> ${enganche:.2f}</p>
             <p><strong>Monto base financiado:</strong> ${monto_base_financiado:.2f}</p>
@@ -166,7 +121,6 @@ else:
             <p><strong>Final a pagar (con promoción):</strong> ${final_a_pagar:.2f}</p>
             <p><strong>Pago mensual:</strong> ${pago_mensual:.2f}</p>
             <p><strong>Pago semanal:</strong> ${pago_semanal:.2f}</p>
-            <p><strong>Liquide con (mes {mes_liquidacion if mes_liquidacion != 0 else "final"}):</strong> ${liquida_con:.2f}</p>
             </div>
             """,
             unsafe_allow_html=True,
