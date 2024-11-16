@@ -1,15 +1,15 @@
 import streamlit as st
 
-# Configurar fondo y estilo general
+# Configurar estilos globales para fondo y texto
 st.markdown(
     """
     <style>
-    body {
+    /* Estilo del contenedor principal */
+    [data-testid="stAppViewContainer"] {
         background-color: #FFFACD; /* Fondo amarillo claro */
     }
-    [data-testid="stAppViewContainer"] {
-        background-color: #FFFACD; /* Fondo amarillo claro para toda la app */
-    }
+
+    /* Estilo de las letras y los recuadros */
     .result-box {
         background-color: #ffffff;
         padding: 15px;
@@ -19,18 +19,27 @@ st.markdown(
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     }
     .result-box h2 {
-        font-size: 20px;
-        color: #333333; /* Texto oscuro */
+        font-size: 22px;
+        color: #000000; /* Texto negro */
+        font-weight: bold;
     }
     .result-box p {
         font-size: 18px;
-        color: #333333;
+        color: #000000; /* Texto negro */
     }
+
+    /* Estilo del título principal */
     .title {
-        color: #333333;
+        color: #000000; /* Texto negro */
         font-size: 32px;
         font-weight: bold;
         margin-bottom: 20px;
+    }
+
+    /* Estilo para inputs (texto negro) */
+    label {
+        color: #000000 !important; /* Asegura que las etiquetas sean negras */
+        font-size: 16px;
     }
     </style>
     """,
