@@ -4,12 +4,10 @@ import streamlit as st
 st.markdown(
     """
     <style>
-    /* Estilo del contenedor principal */
     [data-testid="stAppViewContainer"] {
         background-color: #FFFACD; /* Fondo amarillo claro */
     }
 
-    /* Estilo de las letras y los recuadros */
     .result-box {
         background-color: #ffffff;
         padding: 15px;
@@ -28,7 +26,6 @@ st.markdown(
         color: #000000; /* Texto negro */
     }
 
-    /* Estilo del título principal */
     .title {
         color: #000000; /* Texto negro */
         font-size: 32px;
@@ -36,7 +33,6 @@ st.markdown(
         margin-bottom: 20px;
     }
 
-    /* Estilo para inputs (texto negro) */
     label {
         color: #000000 !important; /* Asegura que las etiquetas sean negras */
         font-size: 16px;
@@ -128,13 +124,14 @@ else:
 
     # Validación del plazo antes de usarlo
     plazo_meses = determinar_plazo(cantidad_financiada_total)
+    plazo_semanas = plazo_meses * 4  # Cada mes equivale a 4 semanas
 
     if plazo_meses == 0:
         st.error("No se encontró un plazo válido para la cantidad financiada total. Verifica los valores ingresados.")
     else:
         # Calcular pagos
         pago_mensual = final_a_pagar / plazo_meses
-        pago_semanal = final_a_pagar / (plazo_meses * 4)
+        pago_semanal = final_a_pagar / plazo_semanas
 
         # Calcular "Liquide con"
         if mes_liquidacion == 0 or mes_liquidacion == "":
@@ -160,7 +157,8 @@ else:
             <div class="result-box">
             <h2>Resultados:</h2>
             <p><strong>Tasa de interés:</strong> {tasa_interes}%</p>
-            <p><strong>Plazo:</strong> {plazo_meses} meses</p>
+            <p><strong>Plazo:</strong> {plazo_meses} meses ({plazo_semanas} semanas)</p>
+            <p><strong>Enganche:</strong> ${enganche:.2f}</p>
             <p><strong>Monto base financiado:</strong> ${monto_base_financiado:.2f}</p>
             <p><strong>Interés calculado:</strong> ${interes_calculado:.2f}</p>
             <p><strong>Cantidad financiada total:</strong> ${cantidad_financiada_total:.2f}</p>
