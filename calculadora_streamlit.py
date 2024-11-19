@@ -100,16 +100,22 @@ if st.button("Calcular factura"):
             # Calcular TOTAL FACTURA
             total_factura = final_a_pagar_total + enganche_total
 
-            # Mostrar resultados totales
-            st.subheader("Resultados Totales de la Factura")
-            st.write(f"Tasa de interés: {tasa_interes_porcentaje:.2f}%")
-            st.write(f"Plazo: {plazo_meses} meses ({plazo_semanas} semanas)")
-            st.write(f"Enganche Total: ${enganche_total:.2f}")
-            st.write(f"Interés Total: ${interes_calculado_total:.2f}")
-            st.write(f"Cantidad Total Financiada: ${cantidad_financiada_total:.2f}")
-            st.write(f"Descuento Promocional Total: ${descuento_promocional_total:.2f}")
-            st.write(f"A Pagar (con Promoción): ${final_a_pagar_total:.2f}")
-            st.write(f"Pago Mensual Total: ${pago_mensual_total:.2f}")
-            st.write(f"Pago Semanal Total: ${pago_semanal_total:.2f}")
-            st.markdown(f"### TOTAL FACTURA: **${total_factura:.2f}**")
-
+            # Mostrar resultados totales en un recuadro
+            st.markdown(
+                f"""
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #ddd;">
+                <h2>Resultados Totales de la Factura:</h2>
+                <p><strong>Tasa de interés:</strong> {tasa_interes_porcentaje:.2f}%</p>
+                <p><strong>Plazo:</strong> {plazo_meses} meses ({plazo_semanas} semanas)</p>
+                <p><strong>Enganche Total:</strong> ${enganche_total:.2f}</p>
+                <p><strong>Interés Total:</strong> ${interes_calculado_total:.2f}</p>
+                <p><strong>Cantidad Total Financiada:</strong> ${cantidad_financiada_total:.2f}</p>
+                <p><strong>Descuento Promocional Total:</strong> ${descuento_promocional_total:.2f}</p>
+                <p><strong>A Pagar (con Promoción):</strong> ${final_a_pagar_total:.2f}</p>
+                <p><strong>Pago Mensual Total:</strong> ${pago_mensual_total:.2f}</p>
+                <p><strong>Pago Semanal Total:</strong> ${pago_semanal_total:.2f}</p>
+                <p style="color: red; font-weight: bold; font-size: 18px;"><strong>TOTAL FACTURA:</strong> ${total_factura:.2f}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
