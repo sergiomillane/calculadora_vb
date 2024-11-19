@@ -10,7 +10,7 @@ if "articulos" not in st.session_state:
 # Función para restaurar valores
 def restaurar_valores():
     st.session_state["articulos"] = []
-    st.session_state["promocion_extra"] = 0.0
+    st.session_state["descuento"] = 0.0
 
 # Botón para restaurar valores
 if st.button("Restaurar"):
@@ -47,14 +47,14 @@ for i, articulo in enumerate(st.session_state["articulos"]):
     precio_total_oferta += articulo["precio_oferta"]
     enganche_total += articulo["enganche"]
 
-# Input de promoción global
-st.subheader("Promoción Global")
-promocion_extra = st.number_input(
-    "Promoción extra (%) para toda la factura",
+# Input de descuento global
+st.subheader("Descuento %")
+descuento = st.number_input(
+    "Descuento (%) para toda la factura",
     min_value=0.0,
     max_value=100.0,
     format="%.2f",
-    key="promocion_extra",
+    key="descuento",
 )
 
 # Botón para calcular factura total
@@ -92,8 +92,8 @@ if st.button("Calcular factura"):
             monto_base_financiado_total = precio_total_oferta - enganche_total
             interes_calculado_total = monto_base_financiado_total * (tasa_interes_factor - 1)
             cantidad_financiada_total = monto_base_financiado_total + interes_calculado_total
-            descuento_promocional_total = precio_total_oferta * (promocion_extra / 100)
-            final_a_pagar_total = cantidad_financiada_total - descuento_promocional_total
+            descuento_total = precio_total_oferta * (descuento / 100)
+            final_a_pagar_total = cantidad_financiada_total - descuento_total
             pago_mensual_total = final_a_pagar_total / plazo_meses
             pago_semanal_total = final_a_pagar_total / plazo_semanas
 
@@ -110,8 +110,8 @@ if st.button("Calcular factura"):
                 <p><strong>Enganche Total:</strong> ${enganche_total:.2f}</p>
                 <p><strong>Interés Total:</strong> ${interes_calculado_total:.2f}</p>
                 <p><strong>Cantidad Total Financiada:</strong> ${cantidad_financiada_total:.2f}</p>
-                <p><strong>Descuento Promocional Total:</strong> ${descuento_promocional_total:.2f}</p>
-                <p><strong>A Pagar (con Promoción):</strong> ${final_a_pagar_total:.2f}</p>
+                <p><strong>Descuento Total:</strong> ${descuento_total:.2f}</p>
+                <p><strong>A Pagar (con Descuento):</strong> ${final_a_pagar_total:.2f}</p>
                 <p><strong>Pago Mensual Total:</strong> ${pago_mensual_total:.2f}</p>
                 <p><strong>Pago Semanal Total:</strong> ${pago_semanal_total:.2f}</p>
                 <p style="color: red; font-weight: bold; font-size: 18px;"><strong>TOTAL FACTURA:</strong> ${total_factura:.2f}</p>
