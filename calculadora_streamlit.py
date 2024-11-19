@@ -1,59 +1,20 @@
 import streamlit as st
 
-# Configurar estilos globales para fondo y texto
-st.markdown(
-    """
-    <style>
-    [data-testid="stAppViewContainer"] {
-        background-color: #FFFACD; /* Fondo amarillo claro */
-    }
-
-    .result-box {
-        background-color: #ffffff;
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        border: 2px solid #FFD700; /* Borde dorado */
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .result-box h2 {
-        font-size: 22px;
-        color: #000000; /* Texto negro */
-        font-weight: bold;
-    }
-    .result-box p {
-        font-size: 18px;
-        color: #000000; /* Texto negro */
-    }
-
-    .title {
-        color: #000000; /* Texto negro */
-        font-size: 32px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    label {
-        color: #000000 !important; /* Asegura que las etiquetas sean negras */
-        font-size: 16px;
-    }
-
-    .total-factura {
-        color: red;
-        font-weight: bold;
-        font-size: 22px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Título principal
-st.markdown('<div class="title">Calculadora de Financiamiento 💵</div>', unsafe_allow_html=True)
+st.title("Calculadora de Financiamiento 💵")
 
-# Lista para almacenar los artículos
+# Inicializar la lista de artículos en el estado de la sesión
 if "articulos" not in st.session_state:
     st.session_state["articulos"] = []
+
+# Función para restaurar valores
+def restaurar_valores():
+    st.session_state["articulos"] = []
+    st.session_state["promocion_extra"] = 0.0
+
+# Botón para restaurar valores
+if st.button("Restaurar"):
+    restaurar_valores()
 
 # Botón para añadir artículo
 if st.button("Añadir artículo"):
@@ -65,7 +26,7 @@ if st.button("Añadir artículo"):
 precio_total_oferta = 0
 enganche_total = 0
 for i, articulo in enumerate(st.session_state["articulos"]):
-    st.markdown(f"### Artículo {i + 1}")
+    st.subheader(f"Artículo {i + 1}")
     col1, col2 = st.columns(2)
     with col1:
         articulo["precio_oferta"] = st.number_input(
@@ -87,12 +48,13 @@ for i, articulo in enumerate(st.session_state["articulos"]):
     enganche_total += articulo["enganche"]
 
 # Input de promoción global
-st.markdown("### Promoción Global")
+st.subheader("Promoción Global")
 promocion_extra = st.number_input(
     "Promoción extra (%) para toda la factura",
     min_value=0.0,
     max_value=100.0,
     format="%.2f",
+    key="promocion_extra",
 )
 
 # Botón para calcular factura total
@@ -139,21 +101,15 @@ if st.button("Calcular factura"):
             total_factura = final_a_pagar_total + enganche_total
 
             # Mostrar resultados totales
-            st.markdown(
-                f"""
-                <div class="result-box">
-                <h2>Resultados Totales de la Factura:</h2>
-                <p><strong>Tasa de interés:</strong> {tasa_interes_porcentaje:.2f}%</p>
-                <p><strong>Plazo:</strong> {plazo_meses} meses ({plazo_semanas} semanas)</p>
-                <p><strong>Enganche Total:</strong> ${enganche_total:.2f}</p>
-                <p><strong>Interés Total:</strong> ${interes_calculado_total:.2f}</p>
-                <p><strong>Cantidad Total Financiada:</strong> ${cantidad_financiada_total:.2f}</p>
-                <p><strong>Descuento Promocional Total:</strong> ${descuento_promocional_total:.2f}</p>
-                <p><strong>A Pagar (con Promoción):</strong> ${final_a_pagar_total:.2f}</p>
-                <p><strong>Pago Mensual Total:</strong> ${pago_mensual_total:.2f}</p>
-                <p><strong>Pago Semanal Total:</strong> ${pago_semanal_total:.2f}</p>
-                <p class="total-factura"><strong>TOTAL FACTURA:</strong> ${total_factura:.2f}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            st.subheader("Resultados Totales de la Factura")
+            st.write(f"Tasa de interés: {tasa_interes_porcentaje:.2f}%")
+            st.write(f"Plazo: {plazo_meses} meses ({plazo_semanas} semanas)")
+            st.write(f"Enganche Total: ${enganche_total:.2f}")
+            st.write(f"Interés Total: ${interes_calculado_total:.2f}")
+            st.write(f"Cantidad Total Financiada: ${cantidad_financiada_total:.2f}")
+            st.write(f"Descuento Promocional Total: ${descuento_promocional_total:.2f}")
+            st.write(f"A Pagar (con Promoción): ${final_a_pagar_total:.2f}")
+            st.write(f"Pago Mensual Total: ${pago_mensual_total:.2f}")
+            st.write(f"Pago Semanal Total: ${pago_semanal_total:.2f}")
+            st.markdown(f"### TOTAL FACTURA: **${total_factura:.2f}**")
+
