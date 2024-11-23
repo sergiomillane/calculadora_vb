@@ -103,8 +103,8 @@ if st.button("Calcular factura"):
             # Mostrar resultados totales en un recuadro
             st.markdown(
                 f"""
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #ddd;">
-                <h2>Resultados Totales de la Factura:</h2>
+                <div style="background-color: #D3D3D3; padding: 15px; border-radius: 10px; border: 1px solid #ddd; color: #000000;">
+                <h2 style="color: #000000;">Resultados Totales de la Factura:</h2>
                 <p><strong>Tasa de interés:</strong> {tasa_interes_porcentaje:.2f}%</p>
                 <p><strong>Plazo:</strong> {plazo_meses} meses ({plazo_semanas} semanas)</p>
                 <p><strong>Enganche Total:</strong> ${enganche_total:.2f}</p>
@@ -119,3 +119,4 @@ if st.button("Calcular factura"):
                 """,
                 unsafe_allow_html=True,
             )
+
