@@ -3,6 +3,16 @@ import streamlit as st
 # Título principal
 st.title("Calculadora de Financiamiento 💵")
 
+# Tablas de acumulado por plazo
+tablas_acumulado = {
+    3: [0, 50, 100],
+    6: [0, 51, 70, 85, 95, 100],
+    9: [0, 35, 50, 63, 75, 85, 92, 97, 100],
+    12: [0, 30, 42, 52, 62, 72, 80, 87, 93, 97, 99, 100],
+    18: [0, 11, 21, 30, 39, 48, 55, 62, 68, 74, 79, 84, 88, 92, 97, 99, 100],
+    24: [0, 8, 16, 23, 30, 37, 43, 48, 53, 58, 63, 68, 72, 76, 80, 84, 87, 90, 93, 95, 97, 98, 99, 100],
+}
+
 # Inicializar la lista de artículos en el estado de la sesión
 if "articulos" not in st.session_state:
     st.session_state["articulos"] = []
@@ -18,9 +28,7 @@ if st.button("Restaurar"):
 
 # Botón para añadir artículo
 if st.button("Añadir artículo"):
-    st.session_state["articulos"].append(
-        {"precio_oferta": 0.0, "enganche": 0.0}
-    )
+    st.session_state["articulos"].append({"precio_oferta": 0.0, "enganche": 0.0})
 
 # Mostrar inputs para cada artículo
 precio_total_oferta = 0
@@ -55,6 +63,16 @@ descuento = st.number_input(
     max_value=100.0,
     format="%.2f",
     key="descuento",
+)
+
+# Input para el mes de liquidación
+st.subheader("Mes de Liquidación")
+mes_liquidacion = st.number_input(
+    "Introduce el mes en el que deseas liquidar (1 a plazo máximo):",
+    min_value=0,
+    max_value=24,
+    format="%d",
+    key="mes_liquidacion",
 )
 
 # Botón para calcular factura total
@@ -97,8 +115,15 @@ if st.button("Calcular factura"):
             pago_mensual_total = final_a_pagar_total / plazo_meses
             pago_semanal_total = final_a_pagar_total / plazo_semanas
 
-            # Calcular TOTAL FACTURA
-            total_factura = final_a_pagar_total + enganche_total
+            # Cálculo del "liquida con"
+            if mes_liquidacion > 0 and mes_liquidacion <= plazo_meses:
+                porcentaje_acumulado = tablas_acumulado[plazo_meses][mes_liquidacion - 1] / 100
+                monto_pagado = pago_mensual_total * (mes_liquidacion - 1)
+                liquida_con = (
+                    monto_base_financiado_total + interes_calculado_total * porcentaje_acumulado - monto_pagado
+                )
+            else:
+                liquida_con = "N/A"
 
             # Mostrar resultados totales en un recuadro
             st.markdown(
@@ -114,9 +139,9 @@ if st.button("Calcular factura"):
                 <p><strong>A Pagar (con Descuento):</strong> ${final_a_pagar_total:.2f}</p>
                 <p><strong>Pago Mensual Total:</strong> ${pago_mensual_total:.2f}</p>
                 <p><strong>Pago Semanal Total:</strong> ${pago_semanal_total:.2f}</p>
-                <p style="color: red; font-weight: bold; font-size: 18px;"><strong>TOTAL FACTURA:</strong> ${total_factura:.2f}</p>
+                <p style="color: red; font-weight: bold; font-size: 18px;"><strong>TOTAL FACTURA:</strong> ${final_a_pagar_total + enganche_total:.2f}</p>
+                <p style="color: green; font-weight: bold;"><strong>Liquida con (Mes {mes_liquidacion}):</strong> ${liquida_con:.2f}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-
